@@ -23,10 +23,11 @@ const appData = {
   servicePricesPercent: 0,
   servicePricesNumber: 0,
   rollback: 0,
+  isError: false,
   init: function () {
     appData.addTitle();
     appData.checkEmptyField();
-    calculateButton.addEventListener('click', appData.start);
+    calculateButton.addEventListener('click', appData.checkEmptyField);
     addScreenButton.addEventListener('click', appData.addScreenBlock);
     inputRange.addEventListener('input', appData.addRollback);
   },
@@ -38,12 +39,25 @@ const appData = {
     appData.addServices();
     appData.addPrices();
     // appData.logger();
-    if (!appData.screenPrice || !appData.screenCount) {
-      console.log('Нет значений');
-      return;
-    }
-    console.log(appData);
     appData.showResult();
+  },
+  checkEmptyField: function () {
+    screens = document.querySelectorAll('.screen');
+
+    appData.isError = false;
+
+    screens.forEach((screen) => {
+      const select = screen.querySelector('select');
+      const input = screen.querySelector('input');
+
+      if (input.value === '' && select.value === '') {
+        appData.isError = true;
+      }
+    });
+
+    if (!appData.isError) {
+      appData.start();
+    }
   },
   logger: function () {
     for (let key in appData) {
