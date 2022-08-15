@@ -25,7 +25,7 @@ const appData = {
   rollback: 0,
   init: function () {
     appData.addTitle();
-    calculateButton.addEventListener('click', appData.start);
+    calculateButton.addEventListener('click', appData.checkEmptyField);
     addScreenButton.addEventListener('click', appData.addScreenBlock);
     inputRange.addEventListener('input', appData.addRollback);
   },
@@ -34,25 +34,28 @@ const appData = {
   },
   start: function () {
     appData.addScreens();
-
-    let checkScreen = true;
-    if (appData.screens.length > 0) {
-      appData.screens.forEach((screen) => {
-        if (screen.name === 'Тип экранов' || screen.count < 1) {
-          checkScreen = false;
-        }
-      });
-      if (checkScreen) {
-        appData.addServices();
-        appData.addPrices();
-        appData.logger();
-        appData.showResult();
-      }
-    }
+    appData.addServices();
+    appData.addPrices();
+    appData.logger();
+    appData.showResult();
   },
   logger: function () {
     console.log(appData);
     console.log(appData.screens);
+  },
+  checkEmptyField: function () {
+    let check = true;
+    screens.forEach((screen) => {
+      const select = screen.querySelector('select');
+      const input = screen.querySelector('input');
+
+      if (input.value === '' && select.value === '') {
+        check = false;
+      }
+    });
+    if (check) {
+      appData.start();
+    }
   },
   showResult: function () {
     totalCostLayout.value = appData.screenPrice;
@@ -68,7 +71,6 @@ const appData = {
       const input = screen.querySelector('input');
       const selectName = select.options[select.selectedIndex].textContent;
 
-      // console.log(screen.name);
       appData.screens.push({
         id: index,
         name: selectName,
