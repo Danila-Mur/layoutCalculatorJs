@@ -49,7 +49,7 @@ const appData = {
       const select = screen.querySelector('select');
       const input = screen.querySelector('input');
 
-      if (input.value === '' && select.value === '') {
+      if (input.value === '' || select.value === '') {
         check = false;
       }
     });
@@ -110,6 +110,9 @@ const appData = {
   addRollback: function () {
     appData.rollback = inputRange.value;
     rangeValue.textContent = inputRange.value + '%';
+    appData.servicePercentPrice =
+      appData.fullPrice - (appData.fullPrice * appData.rollback) / 100;
+    totalPercentPrices.value = appData.servicePercentPrice;
   },
   addPrices: function () {
     appData.screenPrice = appData.screens.reduce((acc, screen) => {
