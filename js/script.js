@@ -112,7 +112,12 @@ const appData = {
     rangeValue.textContent = inputRange.value + '%';
     appData.servicePercentPrice =
       appData.fullPrice - (appData.fullPrice * appData.rollback) / 100;
-    totalPercentPrices.value = appData.servicePercentPrice;
+
+    if (inputRange.value > 0 && isNaN(appData.servicePercentPrice)) {
+      totalPercentPrices.value = 0;
+    } else {
+      totalPercentPrices.value = appData.servicePercentPrice;
+    }
   },
   addPrices: function () {
     appData.screenPrice = appData.screens.reduce((acc, screen) => {
