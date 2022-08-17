@@ -27,10 +27,10 @@ const appData = {
   servicePercentPrice: 0,
   init: function () {
     this.addTitle();
-    calculateButton.addEventListener('click', this.checkEmptyField);
+    calculateButton.addEventListener('click', this.checkEmptyField.bind(this));
     addScreenButton.addEventListener('click', this.addScreenBlock);
-    resetButton.addEventListener('click', this.reset);
-    inputRange.addEventListener('input', this.addRollback);
+    resetButton.addEventListener('click', this.reset.bind(this));
+    inputRange.addEventListener('input', this.addRollback.bind(this));
   },
   addTitle: function () {
     document.title = title.textContent;
@@ -44,18 +44,14 @@ const appData = {
     this.blockInterface();
   },
   reset: function () {
-    appData.removeScreens();
-    appData.removeServices();
-    appData.addPrices();
-    appData.showResult();
-    appData.unblockInterface();
-
-    console.log(appData.screens);
-    console.log(appData.servicesPercent);
-    console.log(appData.servicesNumber);
+    this.removeScreens();
+    this.removeServices();
+    this.addPrices();
+    this.showResult();
+    this.unblockInterface();
   },
   logger: function () {
-    console.log(this);
+    // console.log(this);
     console.log(this.screens);
   },
   checkEmptyField: function () {
@@ -69,7 +65,7 @@ const appData = {
       }
     });
     if (check) {
-      appData.start();
+      this.start();
     }
   },
   showResult: function () {
@@ -85,7 +81,7 @@ const appData = {
       const input = screen.querySelector('input');
       const selectName = select.options[select.selectedIndex].textContent;
 
-      appData.screens.push({
+      this.screens.push({
         id: index,
         name: selectName,
         price: +select.value * +input.value,
@@ -107,7 +103,7 @@ const appData = {
       const input = item.querySelector('input[type = text]');
 
       if (check.checked) {
-        appData.servicesPercent[label.textContent] = +input.value;
+        this.servicesPercent[label.textContent] = +input.value;
       }
     });
 
@@ -117,17 +113,17 @@ const appData = {
       const input = item.querySelector('input[type = text]');
 
       if (check.checked) {
-        appData.servicesNumber[label.textContent] = +input.value;
+        this.servicesNumber[label.textContent] = +input.value;
       }
     });
   },
   addRollback: function () {
-    appData.rollback = inputRange.value;
+    this.rollback = inputRange.value;
     rangeValue.textContent = inputRange.value + '%';
-    appData.servicePercentPrice =
-      appData.fullPrice - (appData.fullPrice * appData.rollback) / 100;
+    this.servicePercentPrice =
+      this.fullPrice - (this.fullPrice * this.rollback) / 100;
 
-    totalPercentPrices.value = appData.servicePercentPrice;
+    totalPercentPrices.value = this.servicePercentPrice;
   },
   addPrices: function () {
     this.screenPrice = this.screens.reduce((acc, screen) => {
@@ -189,13 +185,13 @@ const appData = {
         screen.remove();
       }
     });
-    appData.screens = [];
+    this.screens = [];
   },
   removeServices: function () {
-    appData.servicesPercent = {};
-    appData.servicesNumber = {};
-    appData.servicePricesPercent = 0;
-    appData.servicePricesNumber = 0;
+    this.servicesPercent = {};
+    this.servicesNumber = {};
+    this.servicePricesPercent = 0;
+    this.servicePricesNumber = 0;
   },
   unblockInterface: function () {
     screens.forEach((item) => {
