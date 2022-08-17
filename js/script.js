@@ -47,21 +47,25 @@ const appData = {
     this.removeScreens();
     this.removeServices();
     this.addPrices();
+    this.removeRollback();
     this.showResult();
+    this.logger();
     this.unblockInterface();
   },
   logger: function () {
     // console.log(this);
-    console.log(this.screens);
+    console.log(this);
   },
   checkEmptyField: function () {
     let check = true;
+    screens = document.querySelectorAll('.screen');
     screens.forEach((screen) => {
       const select = screen.querySelector('select');
       const input = screen.querySelector('input');
 
       if (input.value === '' || select.value === '') {
         check = false;
+        alert('Заполните поля');
       }
     });
     if (check) {
@@ -185,9 +189,26 @@ const appData = {
         screen.remove();
       }
     });
+
     this.screens = [];
   },
   removeServices: function () {
+    otherItemsPercent.forEach((item) => {
+      const check = item.querySelector('input[type = checkbox]');
+
+      if (check.checked) {
+        check.checked = false;
+      }
+    });
+
+    otherItemsNumber.forEach((item) => {
+      const check = item.querySelector('input[type = checkbox]');
+
+      if (check.checked) {
+        check.checked = false;
+      }
+    });
+
     this.servicesPercent = {};
     this.servicesNumber = {};
     this.servicePricesPercent = 0;
@@ -216,6 +237,12 @@ const appData = {
 
     calculateButton.style.display = 'block';
     resetButton.style.display = 'none';
+  },
+  removeRollback: function () {
+    this.rollback = 0;
+    rangeValue.textContent = 0 + '%';
+    this.servicePercentPrice = 0;
+    inputRange.value = -1;
   },
 };
 
