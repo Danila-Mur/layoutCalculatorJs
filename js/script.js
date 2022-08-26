@@ -17,8 +17,6 @@ const title = document.getElementsByTagName('h1')[0],
   percentCmsInput = hiddenCmsVariants.querySelector('.main-controls__input'),
   cmsOtherInput = document.querySelector('#cms-other-input');
 let screens = document.querySelectorAll('.screen');
-// console.log('hiddenCmsVariants: ', hiddenCmsVariants);
-// console.log('cmsOpen: ', cmsOpen.checked = true);
 
 const appData = {
   title: '',
@@ -75,7 +73,13 @@ const appData = {
       const select = screen.querySelector('select');
       const input = screen.querySelector('input');
 
-      if (input.value === '' || select.value === '') {
+      if (
+        input.value <= 0 ||
+        input.value === '' ||
+        select.value === '' ||
+        cmsOtherInput.value === '' ||
+        cmsOtherInput.value <= 0
+      ) {
         check = false;
         alert('Заполните поля');
       }
@@ -172,6 +176,7 @@ const appData = {
       hiddenCmsVariants.style.display = 'flex';
     } else {
       hiddenCmsVariants.style.display = 'none';
+      cmsSelect.value = '';
     }
   },
   selectCms: function () {
@@ -209,6 +214,7 @@ const appData = {
 
     cmsOpen.disabled = true;
     cmsSelect.disabled = true;
+    cmsOtherInput.disabled = true;
   },
   removeScreens: function () {
     screens.forEach((screen, index) => {
@@ -274,6 +280,7 @@ const appData = {
     cmsOpen.disabled = false;
     cmsSelect.disabled = false;
     cmsOpen.checked = false;
+    cmsOtherInput.disabled = false;
   },
   removeRollback: function () {
     this.rollback = 0;
@@ -283,7 +290,8 @@ const appData = {
   },
   hiddenCms: function () {
     this.cmsPrice = 0;
-    
+    cmsSelect.value = '';
+
     hiddenCmsVariants.style.display = 'none';
     percentCmsInput.style.display = 'none';
   },
